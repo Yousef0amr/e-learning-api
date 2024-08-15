@@ -48,32 +48,27 @@ const createOrder = wrap(async (authToken, orderData) => {
 
 const generateInvoiceWebhook = wrap(async (req, res) => {
 
-  console.log('Received webhook event:', req.body);
-
   const callbackData = req.body;
 
-  // Verify the signature (optional, for added security)
-  const expectedSignature = callbackData.hmac; // HMAC sent by Paymob
-  const secretKey = process.env.PAYMOB_HMAC_SECRET; // Your HMAC secret from Paymob
-  const computedSignature = crypto.createHmac('sha512', secretKey)
-    .update(JSON.stringify(callbackData))
-    .digest('hex');
+  // // Verify the signature (optional, for added security)
+  // const expectedSignature = callbackData.hmac; // HMAC sent by Paymob
+  // const secretKey = process.env.PAYMOB_HMAC_SECRET; // Your HMAC secret from Paymob
 
-  if (expectedSignature !== computedSignature) {
-    console.error('Invalid signature received from Paymob');
-    return res.status(400).send('Invalid signature');
-  }
+  // const computedSignature = crypto.createHmac('sha512', secretKey)
+  //   .update(JSON.stringify(callbackData))
+  //   .digest('hex');
 
-  // Process the callback data
-  console.log('Received Paymob callback:', callbackData);
+  // if (expectedSignature !== computedSignature) {
+  //   console.error('Invalid signature received from Paymob');
+  //   return res.status(400).send('Invalid signature');
+  // }
 
-  // Example: Update order status based on callback event
-  if (callbackData.success) {
+  if (callbackData.obj.success) {
     // Payment was successful, update the order status in your database
-    console.log(`Payment successful for order ${callbackData.order_id}`);
+    console.log(`Payment successful for order ${callbackData.order}`);
   } else {
     // Payment failed or was canceled, update the order status accordingly
-    console.error(`Payment failed for order ${callbackData.order_id}`);
+    console.error(`Payment failed for order ${callbackData.order}`);
   }
 
   // Respond to Paymob
