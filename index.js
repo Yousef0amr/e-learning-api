@@ -34,7 +34,7 @@ const init = async () => {
     app.use(cors(corsOptions));
 
 
-
+    app.use(express.json());
     app.use(express.static(join(__dirname, '../client/build')))
 
 
