@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { generateInvoice } from '../controllers/payment.controller.js';
+import { generateInvoice, generateInvoiceWebhook } from '../controllers/payment.controller.js';
 
 
 const paymentRouter = Router()
@@ -7,6 +7,11 @@ const paymentRouter = Router()
 
 paymentRouter.route('/generate-invoice')
     .post(generateInvoice)
+
+paymentRouter.route('/generate-invoice-webhook')
+    .post(generateInvoiceWebhook)
+
+
 
 
 
