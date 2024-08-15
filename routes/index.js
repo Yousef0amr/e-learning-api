@@ -35,7 +35,7 @@ mainRouter.use(endpoints.LESSON, multerConfig().array(''), lessonRouter)
 mainRouter.use(endpoints.SECTION, multerConfig().array(''), sectionRouter)
 
 mainRouter.use(endpoints.COUPON, multerConfig().array(''), couponRouter)
-mainRouter.use(endpoints.PAYMENT, multerConfig().array(''), paymentRouter)
+mainRouter.use(endpoints.PAYMENT, paymentRouter)
 mainRouter.use(endpoints.CATEGORY, multerConfig().array(''), categoryRouter)
 mainRouter.use(endpoints.USER, multerConfig().array(''), userRouter)
 

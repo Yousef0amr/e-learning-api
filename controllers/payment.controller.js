@@ -48,7 +48,8 @@ const createOrder = wrap(async (authToken, orderData) => {
 
 const generateInvoiceWebhook = wrap(async (req, res) => {
 
-  console.log('Received webhook event:', req);
+  console.log('Received webhook event:', req.body);
+
   const callbackData = req.body;
 
   // Verify the signature (optional, for added security)
