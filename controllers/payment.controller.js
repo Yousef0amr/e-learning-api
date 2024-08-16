@@ -44,8 +44,8 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
   // }
 
   if (callbackData.obj.success) {
-    // Payment was successful, update the order status in your database
-    console.log(`Payment successful for order ${callbackData.obj.order}`);
+
+    console.log(callbackData.obj);
   } else {
     // Payment failed or was canceled, update the order status accordingly
     console.error(`Payment failed for order ${callbackData.obj.order}`);
