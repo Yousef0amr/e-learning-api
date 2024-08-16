@@ -57,7 +57,7 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
 
 const generateInvoice = wrap(async (req, res) => {
   const authToken = await PaymentService.getAuthToken();
-  const order = await PaymentService.createOrder(authToken, req.body);
+  const order = await PaymentService.createCheckoutSession(authToken, req.body);
 
   const invoiceUrl = order.url;
   return success(res, { invoiceUrl }, 200, 'OK')
