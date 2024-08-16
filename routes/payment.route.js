@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { generateInvoice, generateInvoiceWebhook } from '../controllers/payment.controller.js';
+import { generateInvoice, generateInvoiceWebhook, getAllPayments, getPayment, deletePayment } from '../controllers/payment.controller.js';
 import multerConfig from '../utils/multer.js';
 
 
@@ -13,8 +13,12 @@ paymentRouter.route('/generate-invoice-webhook')
     .post(generateInvoiceWebhook)
 
 
+paymentRouter.route('/')
+    .get(getAllPayments);
 
-
+paymentRouter.route('/:id')
+    .get(getPayment)
+    .delete(deletePayment);
 
 
 export default paymentRouter

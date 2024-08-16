@@ -12,6 +12,7 @@ import DocumentModel from './Document.js';
 import EnrollmentModel from './Enrollment.js';
 import CouponModel from './Coupon.js';
 import LevelModel from './Level.js';
+import PaymentModel from './Payment.js';
 
 const User = UserModel(sequelize);
 const Level = LevelModel(sequelize);
@@ -26,6 +27,7 @@ const Document = DocumentModel(sequelize);
 const Enrollment = EnrollmentModel(sequelize);
 const Coupon = CouponModel(sequelize);
 const CourseCategory = CourseCategoryModel(sequelize);
+const Payment = PaymentModel(sequelize);
 
 // Define associations
 
@@ -78,6 +80,9 @@ Question.belongsTo(Quiz, { foreignKey: 'quiz_id' });
 User.hasMany(Enrollment, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Enrollment.belongsTo(User, { foreignKey: 'user_id' });
 
+User.hasMany(Payment, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Payment.belongsTo(User, { foreignKey: 'user_id' });
+
 // Enrollment associations
 Course.hasMany(Enrollment, { foreignKey: 'course_id', onDelete: 'CASCADE' });
 Enrollment.belongsTo(Course, { foreignKey: 'course_id' });
@@ -98,7 +103,8 @@ const model = {
     Enrollment,
     Course,
     Coupon,
-    CourseCategory
+    CourseCategory,
+    Payment
 };
 
 export default model;

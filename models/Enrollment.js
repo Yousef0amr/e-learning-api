@@ -16,6 +16,7 @@ const EnrollmentModel = (sequelize) => Enrollment.init({
     },
     enrollment_date: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
     },
 }, {

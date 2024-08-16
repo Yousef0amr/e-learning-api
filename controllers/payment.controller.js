@@ -1,49 +1,29 @@
 import ApiError, { success } from '../utils/apiResponse.js';
 import wrap from 'express-async-wrap'
-import axios from 'axios';
+import PaymentService from '../services/payment.service.js'
 
 
-const getAuthToken = wrap(
-  async () => {
-    const authData = {
-      api_key: process.env.PAYMOB_API_KEY // Using environment variable
-    };
-
-    const response = await axios.post('https://accept.paymob.com/api/auth/tokens', authData);
-    return response.data.token;
-  });
 
 
-const createOrder = wrap(async (authToken, orderData) => {
-  const orderDetails = {
-    auth_token: authToken,
-    api_source: "INVOICE",
-    delivery_needed: "false",
-    shipping_data: {
-      "first_name": "منصة",
-      "last_name": "الغالي",
-      "phone_number": "01094331526",
-      "email": "test@account.com"
-    },
-    integrations: [
-      Number(process.env.PAYMOB_INTEGRATION_WALLET),
-      process.env.PAYMOB_INTEGRATION_CARD,
-    ],
-    amount_cents: (orderData.price * 100), // amount in cents (e.g., 10.00 EGP)
-    currency: "EGP",
-    items: [
-      {
-        name: orderData.title,
-        amount_cents: (orderData.price * 100),
-        description: orderData.description,
-        quantity: "1"
-      }
-    ]
-  };
+const deletePayment = wrap(async (req, res, next) => {
+  const payment = await PaymentService.getPayment(req.params.id)
+  if (!payment)
+    return next(new ApiError('Payment not found', 404))
+  await PaymentService.deletePayment(req.params.id)
+  return success(res, { payment }, 200)
+})
 
-  const response = await axios.post('https://accept.paymob.com/api/ecommerce/orders', orderDetails);
-  return response.data;
-});
+const getPayment = wrap(async (req, res, next) => {
+  const payment = await PaymentService.getPayment(req.params.id)
+  if (!payment)
+    return next(new ApiError('Payment not found', 404))
+  return success(res, { payment }, 200)
+})
+
+const getAllPayments = wrap(async (req, res, next) => {
+  const payments = await PaymentService.getAllPayments(req.user_id)
+  return success(res, { payments }, 200)
+})
 
 
 const generateInvoiceWebhook = wrap(async (req, res) => {
@@ -65,23 +45,22 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
 
   if (callbackData.obj.success) {
     // Payment was successful, update the order status in your database
-    console.log(`Payment successful for order ${callbackData.order}`);
+    console.log(`Payment successful for order ${callbackData.obj.order}`);
   } else {
     // Payment failed or was canceled, update the order status accordingly
-    console.error(`Payment failed for order ${callbackData.order}`);
+    console.error(`Payment failed for order ${callbackData.obj.order}`);
   }
 
-  // Respond to Paymob
-  res.status(200).send('Callback received');
+  return success(res, {}, 200, 'OK')
 });
 
 
 const generateInvoice = wrap(async (req, res) => {
-  const authToken = await getAuthToken();
-  const order = await createOrder(authToken, req.body);
+  const authToken = await PaymentService.getAuthToken();
+  const order = await PaymentService.createOrder(authToken, req.body);
 
   const invoiceUrl = order.url;
-  success(res, { invoiceUrl }, 200, 'OK')
+  return success(res, { invoiceUrl }, 200, 'OK')
 })
 
 
@@ -89,5 +68,8 @@ const generateInvoice = wrap(async (req, res) => {
 
 export {
   generateInvoice,
-  generateInvoiceWebhook
+  generateInvoiceWebhook,
+  deletePayment,
+  getPayment,
+  getAllPayments,
 }
