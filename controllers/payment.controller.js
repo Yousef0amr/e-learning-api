@@ -55,7 +55,7 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
     }
 
     console.log(data)
-    console.log(callbackData.obj.order)
+    console.log(callbackData.obj)
 
     // const payment = await PaymentService.addPayment(data)
 
@@ -79,8 +79,7 @@ const generateInvoice = wrap(async (req, res) => {
   const authToken = await PaymentService.getAuthToken();
   const order = await PaymentService.createCheckoutSession(authToken, req.body, req.user_id);
 
-  const invoiceUrl = order.url;
-  return success(res, { invoiceUrl }, 200, 'OK')
+  return success(res, { invoiceUrl: order.url }, 200, 'OK')
 })
 
 

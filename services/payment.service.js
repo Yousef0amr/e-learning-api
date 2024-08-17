@@ -84,20 +84,15 @@ const createCheckoutSession = async (authToken, orderData, user_id) => {
         currency: "EGP",
         items: [
             {
-                name: orderData.title,
+                name: orderData.title + ' - id : ' + orderData.course_id,
                 amount_cents: convertToCents(orderData.price),
                 description: orderData.description,
                 quantity: "1"
             }
         ],
-        extras: {
-            ee: user_id,
+        data: {
+            user_id
         }
-
-
-
-
-
     };
 
     const response = await axios.post('https://accept.paymob.com/api/ecommerce/orders', orderDetails);
