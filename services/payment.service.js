@@ -65,7 +65,7 @@ const getAuthToken = async () => {
 };
 
 
-const createCheckoutSession = async (authToken, orderData) => {
+const createCheckoutSession = async (authToken, orderData, user_id) => {
     const orderDetails = {
         auth_token: authToken,
         api_source: "INVOICE",
@@ -87,6 +87,7 @@ const createCheckoutSession = async (authToken, orderData) => {
                 name: orderData.title,
                 amount_cents: convertToCents(orderData.price),
                 course_id: orderData.course_id,
+                user_id,
                 description: orderData.description,
                 quantity: "1"
             }
