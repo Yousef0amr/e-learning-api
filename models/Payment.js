@@ -22,6 +22,10 @@ const PaymentModel = (sequelize) => Payment.init({
         allowNull: false,
         defaultValue: 'cash',
     },
+    status: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
     order_id: {
         type: DataTypes.STRING,
         allowNull: false

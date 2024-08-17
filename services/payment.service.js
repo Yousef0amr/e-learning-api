@@ -86,10 +86,14 @@ const createCheckoutSession = async (authToken, orderData) => {
             {
                 name: orderData.title,
                 amount_cents: convertToCents(orderData.price),
+                course_id: orderData.course_id,
                 description: orderData.description,
                 quantity: "1"
             }
-        ]
+        ],
+
+
+
     };
 
     const response = await axios.post('https://accept.paymob.com/api/ecommerce/orders', orderDetails);

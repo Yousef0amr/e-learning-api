@@ -13,14 +13,9 @@ const checkUrl = (req, allowedRoutes) => {
     return matches;
 };
 
-// const paymentAllowedUrls = [
-//     { method: 'GET', url: `${endpoints.PAYMENT}` },
-//     { method: 'POST', url: `${endpoints.PAYMENT}` },
-//     { method: 'POST', url: `${endpoints.PAYMENT}/create-checkout-session` },
-//     { method: 'GET', url: `${endpoints.PAYMENT}/:id` },
-//     { method: 'PATCH', url: `${endpoints.PAYMENT}/:id` },
-//     { method: 'DELETE', url: `${endpoints.PAYMENT}/:id` },
-// ]
+const paymentAllowedUrls = [
+    { method: 'POST', url: `${endpoints.PAYMENT}/generate-invoice` },
+]
 
 
 const userAllowedUrls = [
@@ -32,6 +27,10 @@ const userAllowedUrls = [
     { method: 'GET', url: `${endpoints.LEVEL}` },
     { method: 'GET', url: `${endpoints.COURSE}` },
     { method: 'POST', url: `${endpoints.COUPON}/code` },
+    { method: 'GET', url: `${endpoints.USER}/my-courses` },
+    { method: 'GET', url: `${endpoints.USER}/my-courses/:id` },
+    ...paymentAllowedUrls
+
 ]
 
 const isRevokedCallBack = async (req, token) => {
@@ -87,6 +86,8 @@ const authJwt = () => {
                 ...authRegxOperations(endpoints.USER),
                 { url: /^\/uploads\/.*$/, methods: ['GET', 'OPTIONS'] },
                 { method: 'GET', url: `${endpoints.LEVEL}` },
+                { method: 'POST', url: `${endpoints.PAYMENT}/generate-invoice-webhook` },
+
 
 
             ]

@@ -83,9 +83,13 @@ Enrollment.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Payment, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Payment.belongsTo(User, { foreignKey: 'user_id' });
 
+
 // Enrollment associations
 Course.hasMany(Enrollment, { foreignKey: 'course_id', onDelete: 'CASCADE' });
 Enrollment.belongsTo(Course, { foreignKey: 'course_id' });
+
+Payment.hasMany(Enrollment, { foreignKey: 'payment_id', onDelete: 'CASCADE' });
+Enrollment.belongsTo(Payment, { foreignKey: 'payment_id' });
 
 // Sync the database
 await sequelize.sync({ force: false, alter: true });

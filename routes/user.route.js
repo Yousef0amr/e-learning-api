@@ -4,6 +4,7 @@ import { changePasswordSchema, checkEmailSchema, loginSchema, registerSchema, re
 import { login, register, checkEmail, verifyEmail, changePassword, refresh, forgetPassword, restPassword, resendCode, logout } from "../controllers/auth.controller.js";
 import { deleteUser, getAllUsers, getUser, updateUser } from "../controllers/user.controller.js";
 import { updateUserSchema } from "../validators/user.validator.js";
+import { getEnrollment, getUserEnrollments } from "../controllers/enrollment.controller.js";
 
 const userRouter = Router()
 
@@ -24,5 +25,10 @@ userRouter.route('/current-user')
     .patch(validateRequset(updateUserSchema), updateUser)
     .delete(deleteUser)
 
+userRouter.route('/my-courses')
+    .get(getUserEnrollments)
+
+userRouter.route('/my-courses/:id')
+    .get(getEnrollment)
 
 export default userRouter

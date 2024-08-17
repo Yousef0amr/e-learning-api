@@ -1,7 +1,7 @@
 import ApiError, { success } from '../utils/apiResponse.js';
 import wrap from 'express-async-wrap'
 import PaymentService from '../services/payment.service.js'
-
+import enrollmentService from '../services/enrollment.service.js'
 
 
 
@@ -45,7 +45,27 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
 
   if (callbackData.obj.success) {
 
-    console.log(callbackData.obj);
+    const data = {
+      user_id: req.user_id,
+      order_id: callbackData.obj.order.id,
+      payment_date: callbackData.obj.created_at,
+      status: callbackData.obj.success,
+      payment_method: callbackData.obj.source_data.type,
+      amount: callbackData.obj.amount_cents / 100
+    }
+
+    console.log(data)
+    console.log(callbackData.obj)
+
+    // const payment = await PaymentService.addPayment(data)
+
+    // const enrollment = await enrollmentService.addEnrollment({
+    //   user_id: req.user_id,
+    //   course_id: callbackData.obj.order.description,
+    //   payment_id: payment.id
+    // })
+
+    // console.log(enrollment)
   } else {
     // Payment failed or was canceled, update the order status accordingly
     console.error(`Payment failed for order ${callbackData.obj.order}`);

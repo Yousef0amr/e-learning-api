@@ -42,7 +42,7 @@ const init = async () => {
         app.use(morgan('dev'))
     }
 
-    // app.use(authJwt())
+    app.use(authJwt())
 
     app.use('/uploads', express.static(join(__dirname, 'uploads')))
     app.use('/', mainRouter)
