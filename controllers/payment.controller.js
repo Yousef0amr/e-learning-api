@@ -46,7 +46,7 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
   if (callbackData.obj.success) {
 
     const data = {
-      user_id: callbackData.user_id,
+      user_id: callbackData.obj.order.data.user_id,
       order_id: callbackData.obj.order.id,
       payment_date: callbackData.obj.created_at,
       status: callbackData.obj.success,

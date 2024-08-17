@@ -84,14 +84,15 @@ const createCheckoutSession = async (authToken, orderData, user_id) => {
         currency: "EGP",
         items: [
             {
-                name: orderData.title + ' - id : ' + orderData.course_id,
+                name: orderData.title,
                 amount_cents: convertToCents(orderData.price),
                 description: orderData.description,
                 quantity: "1"
             }
         ],
         data: {
-            user_id
+            user_id,
+            course_id: orderData.course_id
         }
     };
 
