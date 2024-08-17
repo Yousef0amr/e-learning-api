@@ -90,8 +90,11 @@ const createCheckoutSession = async (authToken, orderData, user_id) => {
                 quantity: "1"
             }
         ],
-        course_id: orderData.course_id,
-        user_id,
+        extras: {
+            ee: user_id,
+        }
+
+
 
 
 
