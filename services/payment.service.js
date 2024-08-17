@@ -86,12 +86,12 @@ const createCheckoutSession = async (authToken, orderData, user_id) => {
             {
                 name: orderData.title,
                 amount_cents: convertToCents(orderData.price),
-                course_id: orderData.course_id,
-                user_id,
                 description: orderData.description,
                 quantity: "1"
             }
         ],
+        course_id: orderData.course_id,
+        user_id,
 
 
 
