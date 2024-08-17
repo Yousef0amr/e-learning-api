@@ -48,24 +48,20 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
     const data = {
       user_id: callbackData.obj.order.data.user_id,
       order_id: callbackData.obj.order.id,
-      payment_date: callbackData.obj.created_at,
       status: callbackData.obj.success,
       payment_method: callbackData.obj.source_data.type,
       amount: callbackData.obj.amount_cents / 100
     }
 
-    console.log(data)
-    console.log(callbackData.obj)
+    const payment = await PaymentService.addPayment(data)
 
-    // const payment = await PaymentService.addPayment(data)
+    const enrollment = await enrollmentService.addEnrollment({
+      user_id: callbackData.obj.order.data.user_id,
+      course_id: callbackData.obj.order.description,
+      payment_id: payment.id
+    })
 
-    // const enrollment = await enrollmentService.addEnrollment({
-    //   user_id: req.user_id,
-    //   course_id: callbackData.obj.order.description,
-    //   payment_id: payment.id
-    // })
-
-    // console.log(enrollment)
+    console.log(enrollment)
   } else {
     // Payment failed or was canceled, update the order status accordingly
     console.error(`Payment failed for order ${callbackData.obj.order}`);
