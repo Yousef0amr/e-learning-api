@@ -11,9 +11,11 @@ const getEnrollment = async (id) => {
                 include: {
                     model: Lesson,
                     include: [{
-                        model: Video
+                        model: Video,
+                        as: 'videos'
                     }, {
-                        model: Document
+                        model: Document,
+                        as: 'documents'
                     }],
                 }
             }
