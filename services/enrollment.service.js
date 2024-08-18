@@ -18,7 +18,10 @@ const getUserEnrollments = async (id) => {
                 [Op.eq]: id
             }
         },
-        include: { model: Course }
+        include: { model: Course },
+        attributes: {
+            exclude: ['user_id', 'course_id', 'payment_id']
+        }
     })
 }
 
