@@ -1,10 +1,27 @@
 
 import { Op } from 'sequelize';
 import model from './../models/index.js';
-const { Enrollment, Course } = model
+const { Enrollment, Course, Section, Lesson, Video, Document } = model
 
 const getEnrollment = async (id) => {
-    return await Enrollment.findByPk(id)
+    return await Enrollment.findByPk(id, {
+        include: {
+            model: Course, include: {
+                model: Section,
+                include: {
+                    model: Lesson,
+                    include: [{
+                        model: Video
+                    }, {
+                        model: Document
+                    }],
+                }
+            }
+        },
+        attributes: {
+            exclude: ['user_id', 'course_id', 'payment_id']
+        }
+    })
 }
 
 const getAllEnrollments = async () => {

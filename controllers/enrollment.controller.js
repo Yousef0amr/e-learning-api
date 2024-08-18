@@ -18,7 +18,7 @@ const getAllEnrollments = wrap(async (req, res, next) => {
 });
 
 const getEnrollment = wrap(async (req, res, next) => {
-    const enrollment = await enrollmentService.getEnrollment();
+    const enrollment = await enrollmentService.getEnrollment(req.params.id);
     return success(res, { enrollment }, 200);
 });
 const getUserEnrollments = wrap(async (req, res, next) => {
