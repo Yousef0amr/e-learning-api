@@ -1,7 +1,7 @@
 
 import { Op } from 'sequelize';
 import model from './../models/index.js';
-const { Course, Category, CourseCategory, Section, Lesson } = model
+const { Course, Category, CourseCategory, Section, Lesson, Enrollment } = model
 
 const getCourse = async (id) => {
     return await Course.findByPk(id, {
@@ -16,11 +16,13 @@ const getCourse = async (id) => {
 
 const getAllCourses = async () => {
     return await Course.findAll({
-        include: {
+        include: [{
             model: Category,
             as: 'categories',
             through: { attributes: [] }  // Exclude the join table data
-        }
+        }, {
+            model: Enrollment
+        }]
     })
 }
 
