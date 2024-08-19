@@ -88,8 +88,6 @@ const authJwt = () => {
                 { method: 'GET', url: `${endpoints.LEVEL}` },
                 { method: 'POST', url: `${endpoints.PAYMENT}/generate-invoice-webhook` },
 
-
-
             ]
         }
     )
