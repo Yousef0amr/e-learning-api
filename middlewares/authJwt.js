@@ -13,10 +13,6 @@ const checkUrl = (req, allowedRoutes) => {
     return matches;
 };
 
-const paymentAllowedUrls = [
-    { method: 'POST', url: `${endpoints.PAYMENT}/generate-invoice` },
-]
-
 
 const userAllowedUrls = [
     { method: 'GET', url: `${endpoints.USER}/current-user` },
@@ -29,7 +25,7 @@ const userAllowedUrls = [
     { method: 'POST', url: `${endpoints.COUPON}/code` },
     { method: 'GET', url: `${endpoints.USER}/my-courses` },
     { method: 'GET', url: `${endpoints.USER}/my-courses/:id` },
-    ...paymentAllowedUrls
+    { method: 'POST', url: `${endpoints.PAYMENT}/generate-invoice` },
 
 ]
 
@@ -40,6 +36,7 @@ const isRevokedCallBack = async (req, token) => {
     let isAllowed = false
     switch (role) {
         case "User":
+
             isAllowed = checkUrl(req, userAllowedUrls);
             if (isAllowed) {
                 const user = await User.findByPk(userId)

@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import model from './../models/index.js';
-const { Level, Category, Course } = model;
+const { Level, Category, Course, Enrollment } = model;
 
 const getLevel = async (id) => {
 
@@ -11,6 +11,12 @@ const getLevel = async (id) => {
                 include: [
                     {
                         model: Course,
+                        include: [
+                            {
+                                model: Enrollment,
+                                as: 'enrollments'
+                            }
+                        ]
                     }
                 ],
 

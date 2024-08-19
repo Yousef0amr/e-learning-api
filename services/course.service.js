@@ -5,12 +5,15 @@ const { Course, Category, CourseCategory, Section, Lesson, Enrollment } = model
 
 const getCourse = async (id) => {
     return await Course.findByPk(id, {
-        include: {
+        include: [{
             model: Section,
             include: {
                 model: Lesson
             }
-        }
+        }, {
+            model: Enrollment,
+            as: 'enrollments'
+        }]
     })
 }
 
@@ -20,9 +23,8 @@ const getAllCourses = async () => {
             model: Category,
             as: 'categories',
             through: { attributes: [] }  // Exclude the join table data
-        }, {
-            model: Enrollment
-        }]
+        }
+        ]
     })
 }
 

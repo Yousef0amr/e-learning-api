@@ -6,7 +6,7 @@ const { Enrollment, Course, Section, Lesson, Video, Document } = model
 const getEnrollment = async (id) => {
     return await Enrollment.findByPk(id, {
         include: {
-            model: Course, include: {
+            model: Course, as: 'course', include: {
                 model: Section,
                 include: {
                     model: Lesson,
@@ -37,7 +37,7 @@ const getUserEnrollments = async (id) => {
                 [Op.eq]: id
             }
         },
-        include: { model: Course },
+        include: { model: Course, as: 'course' },
         attributes: {
             exclude: ['user_id', 'course_id', 'payment_id']
         }
