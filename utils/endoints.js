@@ -8,6 +8,7 @@ const VIDEO = '/videos'
 const DOCUMENT = '/documents'
 const LEVEL = '/levels'
 const PAYMENT = '/payments'
+const QUIZ = '/quizzes'
 
 
 
@@ -21,7 +22,8 @@ const endpoints = {
     VIDEO,
     DOCUMENT,
     LEVEL,
-    PAYMENT
+    PAYMENT,
+    QUIZ
 }
 
 

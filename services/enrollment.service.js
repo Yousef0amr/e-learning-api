@@ -1,9 +1,9 @@
 
-import { Op } from 'sequelize';
+import { Op, where } from 'sequelize';
 import model from './../models/index.js';
-const { Enrollment, Course, Section, Lesson, Video, Document } = model
+const { Enrollment, Course, Section, Lesson, Video, Document, Quiz, QuizResult } = model
 
-const getEnrollment = async (id) => {
+const getEnrollment = async (id, user_id) => {
     return await Enrollment.findByPk(id, {
         include: {
             model: Course, as: 'course', include: {
@@ -16,7 +16,25 @@ const getEnrollment = async (id) => {
                     }, {
                         model: Document,
                         as: 'documents'
-                    }],
+                    },
+                    {
+                        model: Quiz,
+                        as: 'quizzes',
+                        attributes: ['quiz_id'],
+                        include: {
+                            model: QuizResult,
+                            required: false,
+                            as: 'quizResults',
+                            where: {
+                                user_id: {
+                                    [Op.eq]: user_id
+                                }
+
+                            },
+                            attributes: ['score']
+                        }
+                    }
+                    ],
                 }
             }
         },

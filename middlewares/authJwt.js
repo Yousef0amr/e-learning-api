@@ -26,6 +26,13 @@ const userAllowedUrls = [
     { method: 'GET', url: `${endpoints.USER}/my-courses` },
     { method: 'GET', url: `${endpoints.USER}/my-courses/:id` },
     { method: 'POST', url: `${endpoints.PAYMENT}/generate-invoice` },
+    { method: 'GET', url: `${endpoints.QUIZ}` },
+    { method: 'GET', url: `${endpoints.QUIZ}/:id` },
+    { method: 'GET', url: `${endpoints.QUIZ}?id=:id` },
+    { method: 'POST', url: `${endpoints.QUIZ}` },
+    { method: 'POST', url: `${endpoints.QUIZ}/:id` },
+
+
 
 ]
 

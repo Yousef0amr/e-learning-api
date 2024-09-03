@@ -17,10 +17,6 @@ const QuestionModel = (sequelize) => Question.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    question_type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
     options: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: false,

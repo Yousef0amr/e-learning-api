@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 import videoRouter from "./video.route.js";
 import documentRouter from "./document.route.js";
 import paymentRouter from "./payment.route.js";
+import quizRouter from "./quiz.route.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,6 +38,7 @@ mainRouter.use(endpoints.SECTION, multerConfig().array(''), sectionRouter)
 mainRouter.use(endpoints.COUPON, multerConfig().array(''), couponRouter)
 mainRouter.use(endpoints.PAYMENT, paymentRouter)
 mainRouter.use(endpoints.CATEGORY, multerConfig().array(''), categoryRouter)
+mainRouter.use(endpoints.QUIZ, quizRouter)
 mainRouter.use(endpoints.USER, multerConfig().array(''), userRouter)
 
 

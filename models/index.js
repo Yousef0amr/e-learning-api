@@ -13,7 +13,7 @@ import EnrollmentModel from './Enrollment.js';
 import CouponModel from './Coupon.js';
 import LevelModel from './Level.js';
 import PaymentModel from './Payment.js';
-
+import QuizResultModel from './QuizResult.js';
 const User = UserModel(sequelize);
 const Level = LevelModel(sequelize);
 const Category = CategoryModel(sequelize);
@@ -28,6 +28,8 @@ const Enrollment = EnrollmentModel(sequelize);
 const Coupon = CouponModel(sequelize);
 const CourseCategory = CourseCategoryModel(sequelize);
 const Payment = PaymentModel(sequelize);
+const QuizResult = QuizResultModel(sequelize);
+
 
 // Define associations
 
@@ -59,8 +61,8 @@ Video.belongsTo(Lesson, {
     as: 'lesson'
 });
 
-Lesson.hasMany(Quiz, { foreignKey: 'lesson_id', onDelete: 'CASCADE' });
-Quiz.belongsTo(Lesson, { foreignKey: 'lesson_id' });
+Lesson.hasMany(Quiz, { foreignKey: 'lesson_id', onDelete: 'CASCADE', as: 'quizzes' });
+Quiz.belongsTo(Lesson, { foreignKey: 'lesson_id', as: 'lesson' });
 
 Lesson.hasMany(Document, {
     foreignKey: 'lesson_id',
@@ -73,8 +75,13 @@ Document.belongsTo(Lesson, {
 });
 
 // Quiz associations
-Quiz.hasMany(Question, { foreignKey: 'quiz_id', onDelete: 'CASCADE' });
-Question.belongsTo(Quiz, { foreignKey: 'quiz_id' });
+Quiz.hasMany(Question, { foreignKey: 'quiz_id', onDelete: 'CASCADE', as: 'questions' });
+Question.belongsTo(Quiz, { foreignKey: 'quiz_id', as: 'quiz' });
+
+
+
+Quiz.hasMany(QuizResult, { foreignKey: 'quiz_id', onDelete: 'CASCADE', as: 'quizResults' });
+QuizResult.belongsTo(Quiz, { foreignKey: 'quiz_id', as: 'quiz' });
 
 // User associations
 User.hasMany(Enrollment, { foreignKey: 'user_id', onDelete: 'CASCADE' });
@@ -83,7 +90,8 @@ Enrollment.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Payment, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Payment.belongsTo(User, { foreignKey: 'user_id' });
 
-
+User.hasMany(QuizResult, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+QuizResult.belongsTo(User, { foreignKey: 'user_id' });
 // Enrollment associations
 Course.hasMany(Enrollment, { foreignKey: 'course_id', onDelete: 'CASCADE', as: 'enrollments' });
 Enrollment.belongsTo(Course, { foreignKey: 'course_id', as: 'course' });
@@ -108,7 +116,8 @@ const model = {
     Course,
     Coupon,
     CourseCategory,
-    Payment
+    Payment,
+    QuizResult
 };
 
 export default model;
