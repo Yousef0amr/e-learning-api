@@ -7,14 +7,16 @@ const addLessonSchema = Joi.object({
 
 
 
-
-
-
-
+const addNoteSchema = Joi.object({
+    title: Joi.string().min(1).max(255).required(),
+    content: Joi.string().required(),
+    lesson_id: Joi.number().required()
+})
 
 
 
 
 export {
-    addLessonSchema
+    addLessonSchema,
+    addNoteSchema
 }

@@ -8,12 +8,18 @@ const updateUserSchema = Joi.object({
     phone: Joi.string().min(10).max(11).optional()
 })
 
+const chargeCodeSchema = Joi.object({
+    code: Joi.string().min(11).max(11).required()
+})
 
-
-
+const addChargeCodeSchema = Joi.object({
+    chargeAmount: Joi.number().required()
+})
 
 
 
 export {
-    updateUserSchema
+    updateUserSchema,
+    chargeCodeSchema,
+    addChargeCodeSchema
 }

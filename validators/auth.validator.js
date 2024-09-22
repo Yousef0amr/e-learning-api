@@ -14,6 +14,12 @@ const loginSchema = Joi.object({
     password: Joi.string().required(),
 })
 
+const loginAdminSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    role: Joi.string().valid('Admin').required()
+})
+
 
 const checkEmailSchema = Joi.object({
     email: Joi.string().email().required()
@@ -43,5 +49,6 @@ export {
     checkEmailSchema,
     verifyEmailSchema,
     resetPasswordSchema,
-    changePasswordSchema
+    changePasswordSchema,
+    loginAdminSchema
 }

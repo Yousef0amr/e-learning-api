@@ -14,6 +14,10 @@ import CouponModel from './Coupon.js';
 import LevelModel from './Level.js';
 import PaymentModel from './Payment.js';
 import QuizResultModel from './QuizResult.js';
+import NoteModel from './Note.js';
+import ChargeCodeModel from './ChargeCode.js';
+
+
 const User = UserModel(sequelize);
 const Level = LevelModel(sequelize);
 const Category = CategoryModel(sequelize);
@@ -29,6 +33,8 @@ const Coupon = CouponModel(sequelize);
 const CourseCategory = CourseCategoryModel(sequelize);
 const Payment = PaymentModel(sequelize);
 const QuizResult = QuizResultModel(sequelize);
+const Note = NoteModel(sequelize);
+const ChargeCode = ChargeCodeModel(sequelize);
 
 
 // Define associations
@@ -64,6 +70,10 @@ Video.belongsTo(Lesson, {
 Lesson.hasMany(Quiz, { foreignKey: 'lesson_id', onDelete: 'CASCADE', as: 'quizzes' });
 Quiz.belongsTo(Lesson, { foreignKey: 'lesson_id', as: 'lesson' });
 
+
+Lesson.hasMany(Note, { foreignKey: 'lesson_id', onDelete: 'CASCADE', as: 'notes' });
+Note.belongsTo(Lesson, { foreignKey: 'lesson_id', as: 'lesson' });
+
 Lesson.hasMany(Document, {
     foreignKey: 'lesson_id',
     onDelete: 'CASCADE',
@@ -90,8 +100,11 @@ Enrollment.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Payment, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Payment.belongsTo(User, { foreignKey: 'user_id' });
 
-User.hasMany(QuizResult, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-QuizResult.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(QuizResult, { foreignKey: 'user_id', onDelete: 'CASCADE', as: 'quizResults' });
+QuizResult.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
+User.hasMany(Note, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Note.belongsTo(User, { foreignKey: 'user_id' });
 // Enrollment associations
 Course.hasMany(Enrollment, { foreignKey: 'course_id', onDelete: 'CASCADE', as: 'enrollments' });
 Enrollment.belongsTo(Course, { foreignKey: 'course_id', as: 'course' });
@@ -100,7 +113,7 @@ Payment.hasMany(Enrollment, { foreignKey: 'payment_id', onDelete: 'CASCADE', as:
 Enrollment.belongsTo(Payment, { foreignKey: 'payment_id', as: 'payment' });
 
 // Sync the database
-await sequelize.sync({ force: false, alter: true });
+await sequelize.sync({ force: false, alter: true, hooks: true });
 
 const model = {
     User,
@@ -117,7 +130,9 @@ const model = {
     Coupon,
     CourseCategory,
     Payment,
-    QuizResult
+    QuizResult,
+    Note,
+    ChargeCode,
 };
 
 export default model;

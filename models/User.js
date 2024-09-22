@@ -38,6 +38,11 @@ const UserModel = (db) => User.init(
             unique: true,
             indexes: [{ unique: true }]
         },
+        wallet: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
+        },
         password: {
             type: DataTypes.STRING(100),
             allowNull: false,

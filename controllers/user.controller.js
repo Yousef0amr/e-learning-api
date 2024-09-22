@@ -5,17 +5,17 @@ import { success } from "../utils/apiResponse.js"
 
 
 const getUser = wrap(async (req, res, next) => {
-    const user = await userService.getUser(req.userId)
+    const user = await userService.getUser(req.user_id)
     return success(res, { user }, 200, 'OK')
 })
 
 const updateUser = wrap(async (req, res, next) => {
-    const user = await userService.updateUser(req.body, req.userId)
+    const user = await userService.updateUser(req.body, req.user_id)
     return success(res, { user }, 200, 'OK')
 })
 
 const deleteUser = wrap(async (req, res, next) => {
-    const user = await userService.deleteUser(req.userId)
+    const user = await userService.deleteUser(req.body.password, req.user_id)
     return success(res, { user }, 200, 'OK')
 })
 
@@ -30,9 +30,11 @@ const getAllUsers = wrap(async (req, res, next) => {
 
 
 
+
 export {
     getUser,
     updateUser,
     deleteUser,
     getAllUsers
+
 }

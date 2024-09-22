@@ -4,14 +4,44 @@ import endpoints from "../utils/endoints.js";
 
 const User = model.User
 
-
 const checkUrl = (req, allowedRoutes) => {
-    const matches = allowedRoutes.some(route =>
-        req.method === route.method &&
-        req.originalUrl.includes(route.url)
-    );
+    const matches = allowedRoutes.some(route => {
+        const [routePath, routeQuery] = route.url.split('?'); // Split path and query string
+        const [reqPath, reqQuery] = req.originalUrl.split('?'); // Split request URL and query string
+
+        // Handle dynamic segments in the path like :id
+        const urlPattern = new RegExp(`^${routePath.replace(/:id/g, '\\d+')}$`);
+
+        // Match query parameters (if any)
+        let queryMatch = true;
+        if (routeQuery && reqQuery) {
+            const routeQueryParams = new URLSearchParams(routeQuery);
+            const reqQueryParams = new URLSearchParams(reqQuery);
+
+            routeQueryParams.forEach((value, key) => {
+                if (value === ':id') {
+                    // Dynamic id, just check if the key exists
+                    if (!reqQueryParams.has(key)) {
+                        queryMatch = false;
+                    }
+                } else {
+                    // Exact match required for other query parameters
+                    if (reqQueryParams.get(key) !== value) {
+                        queryMatch = false;
+                    }
+                }
+            });
+        }
+
+        return (req.method === route.method &&
+            urlPattern.test(reqPath) && queryMatch);
+    });
+
+    console.log(matches);
     return matches;
 };
+
+
 
 
 const userAllowedUrls = [
@@ -20,17 +50,30 @@ const userAllowedUrls = [
     { method: 'DELETE', url: `${endpoints.USER}/current-user` },
     { method: 'POST', url: `${endpoints.USER}/change-password` },
     { method: 'POST', url: `${endpoints.USER}/logout` },
-    { method: 'GET', url: `${endpoints.LEVEL}` },
-    { method: 'GET', url: `${endpoints.COURSE}` },
+    //level urls
+    { method: 'GET', url: `${endpoints.LEVEL}/:id` },
+    //course urls
+    { method: 'GET', url: `${endpoints.COURSE}/:id` },
+    //coupon urls
     { method: 'POST', url: `${endpoints.COUPON}/code` },
+    //course urls
     { method: 'GET', url: `${endpoints.USER}/my-courses` },
     { method: 'GET', url: `${endpoints.USER}/my-courses/:id` },
+    //payment urls
     { method: 'POST', url: `${endpoints.PAYMENT}/generate-invoice` },
-    { method: 'GET', url: `${endpoints.QUIZ}` },
+    { method: 'POST', url: `${endpoints.PAYMENT}/generate-wallet-invoice` },
+    { method: 'GET', url: `${endpoints.PAYMENT}` },
+    { method: 'POST', url: `${endpoints.PAYMENT}/charge-code` },
+    //quiz urls
     { method: 'GET', url: `${endpoints.QUIZ}/:id` },
     { method: 'GET', url: `${endpoints.QUIZ}?id=:id` },
-    { method: 'POST', url: `${endpoints.QUIZ}` },
     { method: 'POST', url: `${endpoints.QUIZ}/:id` },
+    //notes urls 
+    { method: 'GET', url: `${endpoints.LESSON}/:id/notes` },
+    { method: 'POST', url: `${endpoints.LESSON}/:id/notes` },
+    { method: 'PATCH', url: `${endpoints.LESSON}/notes/:id` },
+    { method: 'DELETE', url: `${endpoints.LESSON}/notes/:id` },
+
 
 
 
@@ -70,7 +113,7 @@ const authRegxOperations = (user) => {
         { url: `${user}/verify-email`, method: ["POST", "OPTIONS"] },
         { url: `${user}/reset-password`, method: ["POST", "OPTIONS"] },
         { url: `${user}/refresh`, method: ["POST", "OPTIONS"] },
-
+        { url: `${user}/admin/login`, method: ["POST", "OPTIONS"] },
     ];
 
     return allowedUrls;

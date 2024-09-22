@@ -2,7 +2,7 @@ import wrap from 'express-async-wrap'
 import model from '../models/index.js'
 import { Op } from 'sequelize'
 
-const { User } = model
+const { User, QuizResult } = model
 
 const getAllUsers = async () => {
     return await User.findAll({ attributes: { exclude: ['updatedAt', 'createdAt', 'password', 'refreshToken', 'role'] } })
@@ -10,7 +10,10 @@ const getAllUsers = async () => {
 
 const getUser = async (id) => {
     return await User.findByPk(id,
-        { attributes: { exclude: ['updatedAt', 'createdAt', 'password', 'refreshToken', 'role', 'user_id'] } })
+        {
+            include: [{ model: QuizResult, attributes: { include: ['quiz_id'] }, as: 'quizResults', where: { user_id: id }, required: false }],
+            attributes: { exclude: ['updatedAt', 'createdAt', 'password', 'refreshToken', 'role', 'user_id'] }
+        })
 }
 
 const updateUser = async (updateUserDto, id) => {
@@ -26,7 +29,11 @@ const updateUser = async (updateUserDto, id) => {
     )
 }
 
-const deleteUser = async (id) => {
+const deleteUser = async (password, id) => {
+    const user = await User.findByPk(id)
+
+    await user.verifyPassword(password)
+
     return await User.destroy({
         where: {
             user_id: {
@@ -39,11 +46,13 @@ const deleteUser = async (id) => {
 
 
 
+
 const userService = {
     getUser,
     updateUser,
     deleteUser,
     getAllUsers
+
 }
 
 

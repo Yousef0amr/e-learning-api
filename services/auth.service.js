@@ -34,6 +34,9 @@ const login = async (loginDto) => {
         return new ApiError('User not registered', 404);
     }
 
+    if (loginDto.role)
+        return user.role !== loginDto.role ? new ApiError('Unauthorized', 401) : null;
+
     const isPasswordValid = await user.verifyPassword(password);
 
     if (!isPasswordValid) {
@@ -115,7 +118,7 @@ const forgetPassword = async (email) => {
 
 const changePassword = async ({ oldPassword, newPassword }, id) => {
     const user = await User.findByPk(id)
-    const isValid = user.verifyPassword(oldPassword)
+    const isValid = await user.verifyPassword(oldPassword)
     if (!isValid) {
         return new ApiError("Invalid password", 400)
     }

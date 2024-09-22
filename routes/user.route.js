@@ -1,6 +1,6 @@
 import { Router } from "express";
 import validateRequset from "../middlewares/validateRequest.js";
-import { changePasswordSchema, checkEmailSchema, loginSchema, registerSchema, resetPasswordSchema, verifyEmailSchema } from "../validators/auth.validator.js";
+import { changePasswordSchema, checkEmailSchema, loginSchema, loginAdminSchema, registerSchema, resetPasswordSchema, verifyEmailSchema } from "../validators/auth.validator.js";
 import { login, register, checkEmail, verifyEmail, changePassword, refresh, forgetPassword, restPassword, resendCode, logout } from "../controllers/auth.controller.js";
 import { deleteUser, getAllUsers, getUser, updateUser } from "../controllers/user.controller.js";
 import { updateUserSchema } from "../validators/user.validator.js";
@@ -11,6 +11,9 @@ const userRouter = Router()
 
 userRouter.post('/register', validateRequset(registerSchema), register)
 userRouter.post('/login', validateRequset(loginSchema), login)
+
+userRouter.post('/admin/login', validateRequset(loginAdminSchema), login)
+
 userRouter.post('/refresh', refresh)
 userRouter.post('/check-email', validateRequset(checkEmailSchema), checkEmail)
 userRouter.post('/verify-email', validateRequset(verifyEmailSchema), verifyEmail)
