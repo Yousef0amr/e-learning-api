@@ -40,7 +40,7 @@ const init = async () => {
     const app = express()
 
     app.use(cookieParser());
-    app.use(cors(corsOptions));
+    //app.use(cors(corsOptions));
 
 
     app.use(express.json());
