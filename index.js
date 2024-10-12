@@ -19,7 +19,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:3001', 'https://66f08a32de4e9a22ded73294--playful-custard-bfa31c.netlify.app', "https://dainty-choux-5628a9.netlify.app"],  // Replace with your front-end URL
+    origin: ['http://localhost:3000', 'http://localhost:3001','https://playful-custard-bfa31c.netlify.app/', 'https://66f08a32de4e9a22ded73294--playful-custard-bfa31c.netlify.app', "https://dainty-choux-5628a9.netlify.app"],  // Replace with your front-end URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true,  // If you need to allow cookies or authentication headers
