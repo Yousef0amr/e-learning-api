@@ -6,32 +6,12 @@ import wrap from 'express-async-wrap'
 const register = wrap(async (req, res, next) => {
     const callback = await authService.register(req.body)
 
-    if (callback.accessToken) {
-        res.cookie('refreshToken', callback.refreshToken, {
-            path: '/',
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-        });
-    }
-
-
-    return callback.stack ? next(callback) : success(res, { accessToken: callback.accessToken }, 201, 'OK')
+    return callback.stack ? next(callback) : success(res, { accessToken: callback.accessToken, refreshToken: callback.refreshToken }, 201, 'OK')
 })
 
 const login = wrap(async (req, res, next) => {
     const callback = await authService.login(req.body);
-
-    if (callback.accessToken) {
-        res.cookie('refreshToken', callback.refreshToken, {
-            path: '/',
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-        });
-    }
-
-    return callback.stack ? next(callback) : success(res, { accessToken: callback.accessToken }, 201, 'OK')
+    return callback.stack ? next(callback) : success(res, { accessToken: callback.accessToken, refreshToken: callback.refreshToken }, 201, 'OK')
 })
 
 
@@ -42,6 +22,7 @@ const logout = wrap(async (req, res) => {
 
     return success(res, {}, 204, 'OK')
 })
+
 
 
 const restPassword = wrap(async (req, res, next) => {
