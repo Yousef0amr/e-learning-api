@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { generateInvoice, generateInvoiceWebhook, generateWalletInvoice, getAllPayments, deletePayment, generateChargeCode, chargeCode, deleteChargeCode, getAllChargeCodes, updateChargeCode } from '../controllers/payment.controller.js';
+import { generateInvoice, generateInvoiceWebhook, generateWalletInvoice, getAllPayments, deletePayment, generateChargeCode, chargeCode, deleteChargeCode, getAllChargeCodes, updateChargeCode, payWithWallet } from '../controllers/payment.controller.js';
 import multerConfig from '../utils/multer.js';
 import validateRequest from '../middlewares/validateRequest.js';
-import { addChargeCodeSchema, chargeCodeSchema } from '../validators/user.validator.js';
+import { addChargeCodeSchema, chargeCodeSchema, payWithWalletSchema } from '../validators/user.validator.js';
 
 const paymentRouter = Router()
 
@@ -15,6 +15,9 @@ paymentRouter.route('/generate-invoice-webhook')
 
 paymentRouter.route('/generate-wallet-invoice')
     .post(multerConfig().single(''), generateWalletInvoice)
+
+paymentRouter.route('/pay-with-wallet')
+    .post(multerConfig().single(''), validateRequest(payWithWalletSchema), payWithWallet)
 
 paymentRouter.route('/')
     .get(getAllPayments);

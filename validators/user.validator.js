@@ -16,10 +16,15 @@ const addChargeCodeSchema = Joi.object({
     chargeAmount: Joi.number().required()
 })
 
+const payWithWalletSchema = Joi.object({
+    amount: Joi.number().required(),
+    course_id: Joi.number().required()
+})
 
 
 export {
     updateUserSchema,
     chargeCodeSchema,
-    addChargeCodeSchema
+    addChargeCodeSchema,
+    payWithWalletSchema
 }

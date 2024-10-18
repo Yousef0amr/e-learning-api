@@ -9,6 +9,7 @@ const { User } = model
 
 
 const register = async (registerDto) => {
+
     const isExist = await User.findOne({ where: { email: registerDto.email } })
     if (isExist) {
         return new ApiError('User already registered', 400);
@@ -37,7 +38,7 @@ const login = async (loginDto) => {
     if (loginDto.role)
         return user.role !== loginDto.role ? new ApiError('Unauthorized', 401) : null;
 
-    const isPasswordValid = await user.verifyPassword(password);
+    const isPasswordValid = user.verifyPassword(password);
 
     if (!isPasswordValid) {
         return new ApiError('Invalid password', 400);
@@ -56,11 +57,13 @@ const refresh = async (refreshToken) => {
 
     const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     const user = await User.findByPk(payload.user_id);
+
     if (!user || user.refreshToken !== refreshToken) {
         return new ApiError('Invalid refresh token', 400);
     }
 
     const newAccessToken = user.generateAccessToken();
+
 
     return { accessToken: newAccessToken };
 
@@ -94,7 +97,6 @@ const checkEmail = async (email) => {
 }
 
 const verifyEmail = async ({ secret, token }) => {
-
     const isVerified = otpService.verifyOTP(secret, token)
     if (!isVerified)
         return new ApiError('email not verified', 400)
@@ -129,7 +131,7 @@ const changePassword = async ({ oldPassword, newPassword }, id) => {
 }
 
 const restPassword = async ({ email, newPassword }) => {
-    const user = await authService.checkUserByEmail(email)
+    const user = await User.findOne({ where: { email } })
     if (!user)
         return new ApiError("Email not registered", 404)
     return await user.updatePassword(newPassword)

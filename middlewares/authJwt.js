@@ -1,6 +1,6 @@
 import { expressjwt } from "express-jwt";
 import model from "../models/index.js";
-import endpoints from "../utils/endoints.js";
+import endpoints from "../utils/endpoints.js";
 
 const User = model.User
 
@@ -37,7 +37,6 @@ const checkUrl = (req, allowedRoutes) => {
             urlPattern.test(reqPath) && queryMatch);
     });
 
-    console.log(matches);
     return matches;
 };
 
@@ -64,6 +63,7 @@ const userAllowedUrls = [
     { method: 'POST', url: `${endpoints.PAYMENT}/generate-wallet-invoice` },
     { method: 'GET', url: `${endpoints.PAYMENT}` },
     { method: 'POST', url: `${endpoints.PAYMENT}/charge-code` },
+    { method: 'POST', url: `${endpoints.PAYMENT}/pay-with-wallet` },
     //quiz urls
     { method: 'GET', url: `${endpoints.QUIZ}/:id` },
     { method: 'GET', url: `${endpoints.QUIZ}?id=:id` },
@@ -95,7 +95,7 @@ const isRevokedCallBack = async (req, token) => {
                 }
                 return true
             }
-            return true
+            return false
         case "Admin":
             return false
         default:

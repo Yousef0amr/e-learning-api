@@ -8,7 +8,7 @@ import userRouter from "./user.route.js";
 import couponRouter from "./coupon.route.js";
 import levelRouter from "./level.route.js";
 
-import endpoints from "../utils/endoints.js";
+import endpoints from "../utils/endpoints.js";
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import videoRouter from "./video.route.js";

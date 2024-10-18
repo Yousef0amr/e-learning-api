@@ -28,7 +28,9 @@ const PaymentModel = (sequelize) => Payment.init({
     },
     order_id: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4
     },
     amount: {
         type: DataTypes.DECIMAL(10, 2),

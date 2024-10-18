@@ -1,16 +1,18 @@
 import levelService from '../services/level.service.js';
 import ApiError, { success } from '../utils/apiResponse.js';
 import wrap from 'express-async-wrap';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import uploadMedia from '../utils/uploadMedia.js';
+import cloudinary from '../config/cloudinary.js';  // Import Cloudinary config
+import endpoints from '../utils/endpoints.js';  // Folder for Level posters
 
 const addLevel = wrap(async (req, res, next) => {
-    if (req.file) {
-        req.body.poster_url = req.file.path;
+    if (!req.file) {
+        return next(new ApiError('Please upload an image', 400));
     }
+
+    // Upload to Cloudinary
+    req.body.poster_url = await uploadMedia(req.file.path, endpoints.LEVELSPOSTERS);
+
     const level = await levelService.addLevel(req.body);
 
     return success(res, level, 201, 'Level created successfully');
@@ -23,13 +25,12 @@ const updateLevel = wrap(async (req, res, next) => {
     }
 
     if (req.file) {
-        const filePath = path.join(__dirname, '../', level.poster_url.split('/').pop());
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                return next(new ApiError('Failed to delete image file', 500));
-            }
-        });
-        req.body.poster_url = req.file.path;
+        // Delete the existing poster from Cloudinary
+        const publicId = level.poster_url
+        await cloudinary.uploader.destroy(publicId);
+
+        // Upload new poster to Cloudinary
+        req.body.poster_url = await uploadMedia(req.file.path, endpoints.LEVELSPOSTERS);
     }
 
     const updatedLevel = await levelService.updateLevel(req.body, req.params.id);
@@ -42,16 +43,14 @@ const deleteLevel = wrap(async (req, res, next) => {
     if (!level) {
         return next(new ApiError('Level not found', 404));
     }
+
     const deletedLevel = await levelService.deleteLevel(req.params.id);
     if (deletedLevel) {
-        const filePath = path.join(__dirname, '../', level.poster_url.split('/').pop());
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                return next(new ApiError('Failed to delete image file', 500));
-            }
-        });
+        // Delete the poster from Cloudinary
+        const publicId = level.poster_url
+        await cloudinary.uploader.destroy(publicId);
     }
+
     return success(res, { deletedLevel }, 200);
 });
 

@@ -77,6 +77,11 @@ const generateInvoiceWebhook = wrap(async (req, res) => {
 });
 
 
+const payWithWallet = wrap(async (req, res, next) => {
+  const callback = await PaymentService.payWithWallet(req.body, req.user_id);
+  return callback.stack ? next(callback) : success(res, { isPayed: true }, 200, 'تم الدفع بنجاح')
+})
+
 const generateInvoice = wrap(async (req, res) => {
   const authToken = await PaymentService.getAuthToken();
   const order = await PaymentService.createCheckoutSession(authToken, req.body, req.user_id);
@@ -136,5 +141,6 @@ export {
   deleteChargeCode,
   getAllChargeCodes,
   updateChargeCode,
-  generateWalletInvoice
+  generateWalletInvoice,
+  payWithWallet
 }

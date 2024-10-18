@@ -9,10 +9,13 @@ quizRouter.route('/')
     .post(validateRequest(addQuizSchema), addQuiz)
     .get(getAllQuizzes)
 
+quizRouter.route('/results/:id')
+    .post(validateRequest(addQuizResultSchema), addQuizResult)
+
 quizRouter.route('/:id')
     .get(getQuiz)
     .patch(validateRequest(addQuizSchema), updateQuiz)
-    .post(validateRequest(addQuizResultSchema), addQuizResult)
+
     .delete(deleteQuiz);
 
 quizRouter.route('/questions')

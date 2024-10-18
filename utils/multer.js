@@ -1,16 +1,9 @@
 import multer from 'multer';
-import path from 'path';
 import ApiError from './apiResponse.js';
 
 const multerConfig = (fileType = 'image') => {
     const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-            const uploadPath = path.join('uploads');
-            cb(null, uploadPath);
-        },
-        filename: (req, file, cb) => {
-            cb(null, `${Date.now()}-${file.originalname}`);
-        },
+
     });
 
     const fileFilter = (req, file, cb) => {

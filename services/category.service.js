@@ -1,7 +1,7 @@
 
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import model from './../models/index.js';
-const { Category } = model
+const { Category, CourseCategory, Course } = model
 
 const getCategory = async (id) => {
     return await Category.findByPk(id)
@@ -15,8 +15,9 @@ const getAllCategories = async (id) => {
                 [Op.eq]: id
             }
         }
-    })
-}
+
+    });
+};
 
 const addCategory = async (categoryDto) => {
     return await Category.create({ ...categoryDto })

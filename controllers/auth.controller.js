@@ -27,7 +27,7 @@ const logout = wrap(async (req, res) => {
 
 const restPassword = wrap(async (req, res, next) => {
     const callback = await authService.restPassword(req.body)
-    return callback.stack ? next(callback) : success(res, {}, 200, "Password has been changed successfully")
+    return callback.stack ? next(callback) : success(res, { isChanged: true }, 200, "Password has been changed successfully")
 })
 
 
@@ -66,7 +66,7 @@ const resendCode = wrap(async (req, res, next) => {
 })
 
 const refresh = wrap(async (req, res, next) => {
-    const { refreshToken } = req.cookies;
+    const { refreshToken } = req.body;
 
     const callback = await authService.refresh(refreshToken);
 

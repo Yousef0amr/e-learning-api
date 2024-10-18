@@ -1,10 +1,10 @@
 
-import { Op } from 'sequelize';
+import { Op, UUIDV4 as uuidv4 } from 'sequelize';
 import model from './../models/index.js';
 import axios from 'axios';
 import ApiError from '../utils/apiResponse.js';
 
-const { Payment, ChargeCode, User } = model
+const { Payment, ChargeCode, User, Enrollment } = model
 
 
 const getPayment = async (id) => {
@@ -94,6 +94,38 @@ const getAuthToken = async () => {
     const response = await axios.post('https://accept.paymob.com/api/auth/tokens', authData);
     return response.data.token;
 };
+
+const payWithWallet = async (enrollmentDto, user_id) => {
+    const user = await User.findOne({
+        where: {
+            user_id
+        }
+    });
+
+    if (user.wallet < enrollmentDto.amount) {
+        return new ApiError('ليس لديك رصيد كافي', 400)
+    }
+
+    user.wallet = user.wallet - enrollmentDto.amount
+    await user.save()
+
+    const data = {
+        user_id,
+        status: true,
+        payment_method: 'wallet',
+        amount: enrollmentDto.amount
+    }
+
+    const payment = await addPayment(data)
+
+    await Enrollment.create({
+        user_id,
+        course_id: enrollmentDto.course_id,
+        payment_id: payment.payment_id
+    })
+
+    return user.wallet
+}
 
 
 const createCheckoutSession = async (authToken, orderData, user_id) => {
@@ -185,7 +217,9 @@ const PaymentService = {
     deleteChargeCode,
     getAllChargeCodes,
     updateChargeCode,
-    createWalletCheckoutSession
+    createWalletCheckoutSession,
+    payWithWallet
+
 
 }
 
