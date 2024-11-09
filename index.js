@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const corsOptions = {
-    origin: ["http://localhost:3000", "http://localhost:3001", 'https://playful-custard-bfa31c.netlify.app/'],
+    origin: ["http://localhost:3000", "http://localhost:3001", 'https://67220fb3b7aba67b4a52b760--playful-custard-bfa31c.netlify.app'],
     credentials: true,
 };
 
@@ -42,7 +42,7 @@ const init = async () => {
 
     const io = new Server(httpServer, {
         cors: {
-            origin: 'http://localhost:3000',
+            origin: 'https://6722245ec35f89920225127a--playful-custard-bfa31c.netlify.app',
             methods: ['GET', 'POST'],
             credentials: true,
         },
