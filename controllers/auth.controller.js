@@ -11,7 +11,7 @@ const register = wrap(async (req, res, next) => {
 
 const login = wrap(async (req, res, next) => {
     const callback = await authService.login(req.body);
-    return callback.stack ? next(callback) : success(res, { accessToken: callback.accessToken, refreshToken: callback.refreshToken }, 201, 'OK')
+    return callback.stack ? next(callback) : success(res, { accessToken: callback.accessToken, refreshToken: callback.refreshToken }, 200, 'OK')
 })
 
 
