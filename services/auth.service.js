@@ -41,7 +41,7 @@ const login = async (loginDto) => {
     }
 
 
-    const isPasswordValid = user.verifyPassword(password);
+    const isPasswordValid = await user.verifyPassword(password);
 
     if (!isPasswordValid) {
         return new ApiError('Invalid password', 400);

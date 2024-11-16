@@ -9,7 +9,7 @@ class User extends Model {
     generateRefreshToken() {
         return jwt.sign({ user_id: this.user_id, role: this.role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '15d' });
     }
-    verifyPassword(password) {
+    async verifyPassword(password) {
         return bcrypt.compare(password, this.password)
     }
 
