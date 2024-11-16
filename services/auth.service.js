@@ -43,7 +43,7 @@ const login = async (loginDto) => {
 
     const isPasswordValid = user.verifyPassword(password);
 
-    if (isPasswordValid) {
+    if (!isPasswordValid) {
         return new ApiError('Invalid password', 400);
     }
 
