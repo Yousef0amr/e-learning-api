@@ -96,10 +96,13 @@ const checkEmail = async (email) => {
     if (!info.messageInfo)
         return new ApiError('failed to send message')
 
+
+
     return { secret: info.otpSecret }
 }
 
 const verifyEmail = async ({ secret, token }) => {
+
     const isVerified = otpService.verifyOTP(secret, token)
     if (!isVerified)
         return new ApiError('email not verified', 400)

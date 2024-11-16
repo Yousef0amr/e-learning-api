@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const corsOptions = {
-    origin: ["http://localhost:3000", "http://localhost:3001", 'https://playful-custard-bfa31c.netlify.app'],
+    origin: ["http://localhost:3000", "http://localhost:3001", 'https://playful-custard-bfa31c.netlify.app', "http://localhost:60248",],
     credentials: true,
 };
 
