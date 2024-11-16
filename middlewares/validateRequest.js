@@ -4,7 +4,7 @@ const validateRequest = (schema) => (req, res, next) => {
     const { error, value } = schema.validate({ ...req.body })
 
     if (error) {
-        return res.json({ error })
+        return res.status(422).json({ error })
     }
     return next()
 }
